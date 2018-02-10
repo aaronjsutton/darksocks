@@ -19,7 +19,7 @@ SS_COMMON_LIBS += -lbloom -lcork -lcorkipset
 endif
 SS_COMMON_LIBS += -lev -lsodium -lm
 
-bin_PROGRAMS = ss-local ss-tunnel ss-server ss-manager
+bin_PROGRAMS = ds-local ds-tunnel ds-server ds-manager
 
 sni_src = http.c \
           tls.c
@@ -35,7 +35,7 @@ crypto_src = crypto.c \
 
 plugin_src = plugin.c
 
-ss_local_SOURCES = utils.c \
+ds_local_SOURCES = utils.c \
                    jconf.c \
                    json.c \
                    udprelay.c \
@@ -47,7 +47,7 @@ ss_local_SOURCES = utils.c \
                    $(sni_src) \
                    $(acl_src)
 
-ss_tunnel_SOURCES = utils.c \
+ds_tunnel_SOURCES = utils.c \
                     jconf.c \
                     json.c \
                     udprelay.c \
@@ -57,7 +57,7 @@ ss_tunnel_SOURCES = utils.c \
                     $(crypto_src) \
                     $(plugin_src)
 
-ss_server_SOURCES = utils.c \
+ds_server_SOURCES = utils.c \
                     netutils.c \
                     jconf.c \
                     json.c \
@@ -70,25 +70,25 @@ ss_server_SOURCES = utils.c \
                     $(sni_src) \
                     ${acl_src}
 
-ss_manager_SOURCES = utils.c \
+ds_manager_SOURCES = utils.c \
                      jconf.c \
                      json.c \
                      netutils.c \
                      manager.c
 
-ss_local_LDADD = $(SS_COMMON_LIBS)
-ss_tunnel_LDADD = $(SS_COMMON_LIBS)
-ss_server_LDADD = $(SS_COMMON_LIBS)
-ss_manager_LDADD = $(SS_COMMON_LIBS)
-ss_local_LDADD += -lcares
-ss_tunnel_LDADD += -lcares
-ss_server_LDADD += -lcares
-ss_manager_LDADD += -lcares
+ds_local_LDADD = $(SS_COMMON_LIBS)
+ds_tunnel_LDADD = $(SS_COMMON_LIBS)
+ds_server_LDADD = $(SS_COMMON_LIBS)
+ds_manager_LDADD = $(SS_COMMON_LIBS)
+ds_local_LDADD += -lcares
+ds_tunnel_LDADD += -lcares
+ds_server_LDADD += -lcares
+ds_manager_LDADD += -lcares
 
-ss_local_CFLAGS = $(AM_CFLAGS) -DMODULE_LOCAL
-ss_tunnel_CFLAGS = $(AM_CFLAGS) -DMODULE_TUNNEL
-ss_server_CFLAGS = $(AM_CFLAGS) -DMODULE_REMOTE
-ss_manager_CFLAGS = $(AM_CFLAGS) -DMODULE_MANAGER
+ds_local_CFLAGS = $(AM_CFLAGS) -DMODULE_LOCAL
+ds_tunnel_CFLAGS = $(AM_CFLAGS) -DMODULE_TUNNEL
+ds_server_CFLAGS = $(AM_CFLAGS) -DMODULE_REMOTE
+ds_manager_CFLAGS = $(AM_CFLAGS) -DMODULE_MANAGER
 
 if BUILD_REDIRECTOR
 bin_SCRIPTS = ss-nat
@@ -108,12 +108,12 @@ ss_redir_LDADD = $(SS_COMMON_LIBS)
 ss_redir_LDADD += -lcares
 endif
 
-lib_LTLIBRARIES = libshadowsocks-libev.la
-libshadowsocks_libev_la_SOURCES = $(ss_local_SOURCES)
-libshadowsocks_libev_la_CFLAGS = $(ss_local_CFLAGS) -DLIB_ONLY
-libshadowsocks_libev_la_LDFLAGS = -version-info $(VERSION_INFO)
-libshadowsocks_libev_la_LIBADD = $(ss_local_LDADD)
-include_HEADERS = shadowsocks.h
+lib_LTLIBRARIES = libdarksocks.la
+libdarksocks_la_SOURCES = $(ds_local_SOURCES)
+libdarksocks_la_CFLAGS = $(ds_local_CFLAGS) -DLIB_ONLY
+libdarksocks_la_LDFLAGS = -version-info $(VERSION_INFO)
+libdarksocks_la_LIBADD = $(ds_local_LDADD)
+include_HEADERS = darksocks.h
 
 noinst_HEADERS = acl.h crypto.h stream.h aead.h json.h netutils.h redir.h server.h tls.h uthash.h \
                  cache.h http.h local.h plugin.h resolv.h tunnel.h utils.h base64.h ppbloom.h \

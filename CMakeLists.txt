@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2)
 
-set(PROJECT_NAME shadowsocks-libev)
+set(PROJECT_NAME darksocks)
 set(RELEASE_DATE 2018-1-15)
 set(PROJECT_VERSION "3.1.3")
 set(PROJECT_DESC "a lightweight secured socks5 proxy")
@@ -43,12 +43,12 @@ add_definitions(-DHAVE_CONFIG_H)
 
 # pkg-config
 configure_file(
-        ${CMAKE_SOURCE_DIR}/cmake/shadowsocks-libev.pc.cmake
-        ${CMAKE_BINARY_DIR}/pkgconfig/shadowsocks-libev.pc
+        ${CMAKE_SOURCE_DIR}/cmake/darksocks.pc.cmake
+        ${CMAKE_BINARY_DIR}/pkgconfig/darksocks.pc
         @ONLY
 )
 install(FILES
-        ${CMAKE_BINARY_DIR}/pkgconfig/shadowsocks-libev.pc
+        ${CMAKE_BINARY_DIR}/pkgconfig/darksocks.pc
         DESTINATION pkgconfig
         )
 
@@ -143,4 +143,3 @@ endif ()
 
 add_subdirectory(src)
 add_subdirectory(doc)
-

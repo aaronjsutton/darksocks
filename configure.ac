@@ -2,7 +2,7 @@ dnl                                               -*- Autoconf -*-
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.67])
-AC_INIT([shadowsocks-libev], [3.1.3], [max.c.lv@gmail.com])
+AC_INIT([darksocks], [3.1.4], [aaronjsutton@icloud.com])
 AC_CONFIG_SRCDIR([src/crypto.c])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR(auto)
@@ -37,22 +37,6 @@ AC_ARG_ENABLE(
       *) AC_MSG_ERROR([bad value ${enableval} for --enable-system-shared-lib]) ;;
     esac], [enable_system_shared_lib=false])
 AM_CONDITIONAL([USE_SYSTEM_SHARED_LIB], [test x$enable_system_shared_lib = xtrue])
-
-AC_ARG_ENABLE([documentation],
-  AS_HELP_STRING([--disable-documentation], [do not build documentation]),
-  [disable_documentation=true],
-  [disable_documentation=false])
-AM_CONDITIONAL([ENABLE_DOCUMENTATION], [test x$disable_documentation = xfalse])
-
-AM_COND_IF([ENABLE_DOCUMENTATION], [
-  AC_PATH_PROG([ASCIIDOC], [asciidoc])
-  test x"${ASCIIDOC}" != x || AC_MSG_ERROR([Cannot find `asciidoc` in PATH.])
-  AC_PATH_PROG([XMLTO], [xmlto])
-  test x"$XMLTO" != x || AC_MSG_ERROR([Cannot find `xmlto` in PATH.])
-  AC_PATH_PROG([GZIP], [gzip], [gzip])
-  AC_PATH_PROG([MV], [mv], [mv])
-  AC_PROG_SED
-])
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -222,7 +206,7 @@ AC_CHECK_FUNCS([malloc memset posix_memalign socket])
 AC_CHECK_HEADERS([ev.h libev/ev.h], [], [])
 AC_CHECK_LIB([ev], [ev_loop_destroy], [LIBS="-lev $LIBS"], [AC_MSG_ERROR([Couldn't find libev. Try installing libev-dev@<:@el@:>@.])])
 
-AC_CONFIG_FILES([shadowsocks-libev.pc
+AC_CONFIG_FILES([darksocks.pc
                  Makefile
                  doc/Makefile
                  src/Makefile])

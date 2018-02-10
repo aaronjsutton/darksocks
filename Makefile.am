@@ -4,14 +4,10 @@ else
 SUBDIRS = libcork libipset libbloom src
 endif
 
-if ENABLE_DOCUMENTATION
-SUBDIRS += doc
-endif
-
 ACLOCAL_AMFLAGS = -I m4
 
 pkgconfiglibdir = $(libdir)/pkgconfig
-pkgconfiglib_DATA = shadowsocks-libev.pc
+pkgconfiglib_DATA = darksocks.pc
 
 EXTRA_DIST = acl Changes completions debian docker rpm scripts README.md
 EXTRA_DIST += libbloom

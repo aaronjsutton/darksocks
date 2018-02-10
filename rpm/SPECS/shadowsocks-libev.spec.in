@@ -158,40 +158,40 @@ fi
 %endif
 
 
-%package -n libshadowsocks-libev
+%package -n libdarksocks
 Summary:        %{?summary} (shared library)
 AutoReq:        no
 Requires:       pcre openssl mbedtls libsodium >= 1.0.4 libev c-ares
 
-%description -n libshadowsocks-libev
+%description -n libdarksocks
 Shared library powered by shadowsocks-libev.
 %{?project_desc}
 
-%files -n libshadowsocks-libev
+%files -n libdarksocks
 %{_libdir}/*.so.*
 
-%post -n libshadowsocks-libev
+%post -n libdarksocks
 /sbin/ldconfig
 
-%postun -n libshadowsocks-libev
+%postun -n libdarksocks
 /sbin/ldconfig
 
 
-%package -n libshadowsocks-libev-devel
+%package -n libdarksocks-devel
 Summary:    Development files for shadowsocks-libev
 Provides:   shadowsocks-libev-devel = %{version}-%{release}
-Requires:   libshadowsocks-libev = %{version}-%{release}
+Requires:   libdarksocks = %{version}-%{release}
 Obsoletes:  shadowsocks-libev-devel < %{version}-%{release}
 
-%description -n libshadowsocks-libev-devel
-Development files for libshadowsocks-libev.
+%description -n libdarksocks-devel
+Development files for libdarksocks.
 %{?project_desc}
 
-%files -n libshadowsocks-libev-devel
+%files -n libdarksocks-devel
 %{_includedir}/*
 %{_libdir}/pkgconfig/*.pc
-%{_libdir}/libshadowsocks-libev.la
-%{_libdir}/libshadowsocks-libev.so
+%{_libdir}/libdarksocks.la
+%{_libdir}/libdarksocks.so
 
 %package zsh-completion
 Summary:        This package installs zsh completion files for shadowsocks-libev.
