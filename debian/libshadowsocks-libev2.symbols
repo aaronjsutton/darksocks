@@ -1,4 +1,4 @@
-libshadowsocks-libev.so.2 libshadowsocks-libev2 #MINVER#
+libdarksocks.so.2 libdarksocks2 #MINVER#
  ERROR@Base 2.4.7
  FATAL@Base 2.4.7
  accept_rule_arg@Base 2.5.6
