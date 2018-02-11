@@ -1733,6 +1733,9 @@ _start_ds_local_server(profile_t profile, ss_local_callback callback, void *udat
     int mptcp         = 0;
     char *plugin      = profile.plugin;
     char *plugin_opts = profile.plugin_opts;
+    char *plugin_host = NULL;
+    char *plugin_port = NULL;
+    char tmp_port[8];
 
     mode      = profile.mode;
     fast_open = profile.fast_open;
@@ -1770,6 +1773,16 @@ _start_ds_local_server(profile_t profile, ss_local_callback callback, void *udat
 
     LOGI("got plugin... %s", plugin);
     LOGI("with opts... %s", plugin_opts);
+
+    uint16_t port = get_local_port();
+    if (port == 0) {
+        FATAL("failed to find a free port");
+    }
+    snprintf(tmp_port, 8, "%d", port);
+    plugin_host = "127.0.0.1";
+    plugin_port = tmp_port;
+
+    LOGI("plugin \"%s\" enabled on port %s", plugin, plugin_port);
 
     // Setup keys
     LOGI("initializing ciphers... %s", method);

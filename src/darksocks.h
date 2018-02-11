@@ -41,8 +41,8 @@ typedef struct {
     int mptcp;            // enable multipath TCP
     int verbose;          // verbose mode
 
-    char* plugin;
-    char* plugin_opts;
+    char *plugin;
+    char *plugin_opts;
 } profile_t;
 
 /* An example profile
