@@ -40,7 +40,7 @@
 #include <netinet/in.h>
 
 #ifdef LIB_ONLY
-#include "shadowsocks.h"
+#include "darksocks.h"
 #endif
 
 #if defined(HAVE_SYS_IOCTL_H) && defined(HAVE_NET_IF_H) && defined(__linux__)
@@ -1717,7 +1717,7 @@ main(int argc, char **argv)
 #else
 
 int
-_start_ss_local_server(profile_t profile, ss_local_callback callback, void *udata)
+_start_ds_local_server(profile_t profile, ss_local_callback callback, void *udata)
 {
     srand(time(NULL));
 
@@ -1852,15 +1852,15 @@ _start_ss_local_server(profile_t profile, ss_local_callback callback, void *udat
 }
 
 int
-start_ss_local_server(profile_t profile)
+start_ds_local_server(profile_t profile)
 {
-    return _start_ss_local_server(profile, NULL, NULL);
+    return _start_ds_local_server(profile, NULL, NULL);
 }
 
 int
-start_ss_local_server_with_callback(profile_t profile, ss_local_callback callback, void *udata)
+start_ds_local_server_with_callback(profile_t profile, ss_local_callback callback, void *udata)
 {
-    return _start_ss_local_server(profile, callback, udata);
+    return _start_ds_local_server(profile, callback, udata);
 }
 
 #endif
