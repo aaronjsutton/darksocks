@@ -24,6 +24,7 @@
 #define _LOCAL_H
 
 #include <libcork/ds.h>
+#include <math.h>
 
 #ifdef HAVE_LIBEV_EV_H
 #include <libev/ev.h>

@@ -1719,6 +1719,7 @@ main(int argc, char **argv)
 int
 _start_ds_local_server(profile_t profile, ss_local_callback callback, void *udata)
 {
+    int i;
     srand(time(NULL));
 
     char *remote_host = profile.remote_host;
@@ -1736,6 +1737,14 @@ _start_ds_local_server(profile_t profile, ss_local_callback callback, void *udat
     char *plugin_host = NULL;
     char *plugin_port = NULL;
     char tmp_port[8];
+
+    int remote_num = 0;
+    ss_addr_t remote_addr[MAX_REMOTE_NUM];
+
+    if (remote_num < MAX_REMOTE_NUM) {
+        remote_addr[remote_num].host   = remote_host;
+        remote_addr[remote_num++].port = NULL;
+    }
 
     mode      = profile.mode;
     fast_open = profile.fast_open;
@@ -1774,15 +1783,30 @@ _start_ds_local_server(profile_t profile, ss_local_callback callback, void *udat
     LOGI("got plugin... %s", plugin);
     LOGI("with opts... %s", plugin_opts);
 
-    uint16_t port = get_local_port();
-    if (port == 0) {
-        FATAL("failed to find a free port");
-    }
-    snprintf(tmp_port, 8, "%d", port);
-    plugin_host = "127.0.0.1";
-    plugin_port = tmp_port;
+    if (plugin != NULL) {
 
-    LOGI("plugin \"%s\" enabled on port %s", plugin, plugin_port);
+      uint16_t port = get_local_port();
+      if (port == 0) {
+        FATAL("failed to find a free port");
+      }
+      snprintf(tmp_port, 8, "%d", port);
+      plugin_host = "127.0.0.1";
+      plugin_port = tmp_port;
+
+      LOGI("plugin \"%s\" enabled on port %s", plugin, plugin_port);
+
+      size_t buf_size  = 256 * remote_num;
+      char *remote_str = ss_malloc(buf_size);
+
+      snprintf(remote_str, buf_size, "%s", remote_addr[0].host);
+
+
+      int err = start_plugin(plugin, plugin_opts, remote_str,
+                             remote_port_str, plugin_host, plugin_port, MODE_CLIENT);
+      if (err) {
+          FATAL("failed to start the plugin");
+      }
+    }
 
     // Setup keys
     LOGI("initializing ciphers... %s", method);
@@ -1799,11 +1823,31 @@ _start_ds_local_server(profile_t profile, ss_local_callback callback, void *udat
     // Setup proxy context
     struct ev_loop *loop = EV_DEFAULT;
 
-    struct sockaddr *remote_addr_tmp[MAX_REMOTE_NUM];
+    // struct sockaddr *remote_addr_tmp[MAX_REMOTE_NUM];
     listen_ctx_t listen_ctx;
-    listen_ctx.remote_num     = 1;
-    listen_ctx.remote_addr    = remote_addr_tmp;
-    listen_ctx.remote_addr[0] = (struct sockaddr *)(&storage);
+    listen_ctx.remote_num     = 0;
+    listen_ctx.remote_addr = ss_malloc(sizeof(struct sockaddr *) * remote_num);
+    memset(listen_ctx.remote_addr, 0, sizeof(struct sockaddr *) * remote_num);
+    for (i = 0; i < remote_num; i++) {
+        char *host = remote_addr[i].host;
+        char *port = remote_addr[i].port == NULL ? remote_port_str :
+                     remote_addr[i].port;
+        if (plugin != NULL) {
+            host = plugin_host;
+            port = plugin_port;
+        }
+        struct sockaddr_storage *storage = ss_malloc(sizeof(struct sockaddr_storage));
+        memset(storage, 0, sizeof(struct sockaddr_storage));
+        if (get_sockaddr(host, port, storage, 1, ipv6first) == -1) {
+            FATAL("failed to resolve the provided hostname");
+        }
+        listen_ctx.remote_addr[i] = (struct sockaddr *)storage;
+        ++listen_ctx.remote_num;
+
+        if (plugin != NULL)
+            break;
+    }
+    
     listen_ctx.timeout        = timeout;
     listen_ctx.iface          = NULL;
     listen_ctx.mptcp          = mptcp;
@@ -1856,6 +1900,10 @@ _start_ds_local_server(profile_t profile, ss_local_callback callback, void *udat
     }
 
     // Clean up
+    if (plugin != NULL) {
+        stop_plugin();
+    }
+
     if (mode != UDP_ONLY) {
         ev_io_stop(loop, &listen_ctx.io);
         free_connections(loop);
