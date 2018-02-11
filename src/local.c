@@ -1731,6 +1731,8 @@ _start_ds_local_server(profile_t profile, ss_local_callback callback, void *udat
     int timeout       = profile.timeout;
     int mtu           = 0;
     int mptcp         = 0;
+    char *plugin      = profile.plugin;
+    char *plugin_opts = profile.plugin_opts;
 
     mode      = profile.mode;
     fast_open = profile.fast_open;
@@ -1765,6 +1767,9 @@ _start_ds_local_server(profile_t profile, ss_local_callback callback, void *udat
     ev_signal_init(&sigchld_watcher, signal_cb, SIGCHLD);
     ev_signal_start(EV_DEFAULT, &sigusr1_watcher);
     ev_signal_start(EV_DEFAULT, &sigchld_watcher);
+
+    LOGI("got plugin... %s", plugin);
+    LOGI("with opts... %s", plugin_opts);
 
     // Setup keys
     LOGI("initializing ciphers... %s", method);
