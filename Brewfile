@@ -1,0 +1,7 @@
+brew 'libsodium'
+brew 'c-ares'
+brew 'libev'
+brew 'mbedtls'
+brew 'pcre'
+brew 'gettext'
+brew 'pkg-config'
