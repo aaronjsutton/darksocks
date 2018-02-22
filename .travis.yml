@@ -49,13 +49,7 @@ script:
           ./configure;
       fi
     - make
-    - cd build && cmake ../ && make
+    - cd build && make ../ && make
 branches:
     only:
         - master
-notifications:
-    recipients:
-        - max.c.lv@gmail.com
-    email:
-        on_success: change
-        on_failure: always
