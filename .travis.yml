@@ -5,4 +5,5 @@ compiler: clang
 os: osx
 install:
   - brew bundle
+  - aclocal
   - autoreconf
