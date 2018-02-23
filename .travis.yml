@@ -7,3 +7,6 @@ install:
   - brew bundle
   - aclocal
   - autoreconf --install --force
+
+script:
+  - ./configure && make
