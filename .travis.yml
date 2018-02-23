@@ -6,5 +6,5 @@ os: osx
 install:
   - brew bundle
   - aclocal
+  - autoconf
   - automake --add-missing
-  - autoreconf
