@@ -5,5 +5,5 @@ compiler: clang
 os: osx
 install:
   - brew bundle
-  - aclocal
+  - automake --add-missing
   - autoreconf
